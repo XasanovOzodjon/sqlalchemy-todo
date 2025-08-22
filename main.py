@@ -1,6 +1,6 @@
 from database import engine, metadata_obj, get_connection
 import models
-from crud import create_task, get_tasks, delete_task, update_task
+from crud import create_task, get_tasks, delete_task, update_task, chenge_task_status
 
 from datetime import datetime
 
@@ -32,7 +32,8 @@ def edit_task():
 
     update_task(get_connection(), task_id, title="Edited Task")
 
-show_tasks()
-edit_task()
+# add_tasks()
+# show_tasks()
+# edit_task()
 
-
+chenge_task_status(get_connection(), 1)

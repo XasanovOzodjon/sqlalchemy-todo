@@ -68,7 +68,29 @@ def update_task(
         query = update(tasks).where(tasks.c.id == task_id).values(
             title=title or task[1],
             description=description or task[2],
-            due_date=due_date or task[4]
+            due_date=due_date or task[4],
+            updated_at=datetime.now()
+        )
+        conn.execute(query)
+
+        conn.commit()
+    except Exception as e:
+        print(e)
+        conn.rollback()
+    finally:
+        conn.close()
+
+
+def chenge_task_status(conn: Connection, task_id: int,):
+    try:
+        query = select(tasks).where(tasks.c.id == task_id)
+
+        result = conn.execute(query)
+        task = result.fetchone() # (1, title, desc, completed, due-date, created-at)
+
+        query = update(tasks).where(tasks.c.id == task_id).values(
+            completed=not task[3],
+            updated_at=datetime.now()
         )
         conn.execute(query)
 
