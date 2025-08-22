@@ -24,3 +24,17 @@ def create_task(
         conn.rollback()
     finally:
         conn.close()
+
+def get_tasks(conn: Connection):
+    result = []
+    try:
+        query = select(tasks)
+
+        result = conn.execute(query)
+        conn.commit()
+    except Exception as e:
+        print(e)
+    finally:
+        conn.close()
+
+    return result
