@@ -1,6 +1,6 @@
 from database import engine, metadata_obj, get_connection
 import models
-from crud import create_task, get_tasks, delete_task
+from crud import create_task, get_tasks, delete_task, update_task
 
 from datetime import datetime
 
@@ -27,5 +27,12 @@ def remove_task():
     task_id = int(input("task id: "))
     delete_task(get_connection(), task_id)
 
+def edit_task():
+    task_id = int(input("task id: "))
+
+    update_task(get_connection(), task_id, title="Edited Task")
+
 show_tasks()
-remove_task()
+edit_task()
+
+

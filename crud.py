@@ -51,3 +51,31 @@ def delete_task(conn: Connection, task_id: int):
     finally:
         conn.close()
 
+
+def update_task(
+        conn: Connection, 
+        task_id: int, 
+        title: str | None = None,
+        description: str | None = None,
+        due_date: datetime | None = None
+    ):
+    try:
+        query = select(tasks).where(tasks.c.id == task_id)
+
+        result = conn.execute(query)
+        task = result.fetchone() # (1, title, desc, completed, due-date, created-at)
+
+        query = update(tasks).where(tasks.c.id == task_id).values(
+            title=title or task[1],
+            description=description or task[2],
+            due_date=due_date or task[4]
+        )
+        conn.execute(query)
+
+        conn.commit()
+    except Exception as e:
+        print(e)
+        conn.rollback()
+    finally:
+        conn.close()
+
