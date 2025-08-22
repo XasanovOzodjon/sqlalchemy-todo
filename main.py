@@ -1,6 +1,6 @@
 from database import engine, metadata_obj, get_connection
 import models
-from crud import create_task, get_tasks
+from crud import create_task, get_tasks, delete_task
 
 from datetime import datetime
 
@@ -23,3 +23,9 @@ def show_tasks():
     for row in result:
         print(row)
 
+def remove_task():
+    task_id = int(input("task id: "))
+    delete_task(get_connection(), task_id)
+
+show_tasks()
+remove_task()
