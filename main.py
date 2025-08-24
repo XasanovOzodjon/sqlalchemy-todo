@@ -6,20 +6,15 @@ from datetime import datetime
 
 metadata_obj.create_all(engine)
 
-
 def add_task():
     title = input("title: ")
     description = input("description: ")
     due_date_text = input("due date (yyyy-mm-dd | hh:mm): ")
-
     due_date = datetime.strptime(due_date_text, "%Y-%m-%d | %H:%M")
-
     create_task(get_connection(), title, description=description, due_date=due_date)
-
 
 def show_tasks():
     result = get_tasks(get_connection())
-
     for row in result:
         print(row)
 
@@ -29,28 +24,30 @@ def remove_task():
 
 def edit_task():
     task_id = int(input("task id: "))
-
-    update_task(get_connection(), task_id, title="Edited Task")
+    title = input("Yangi title (bo'sh qoldirsangiz o'zgarmaydi): ")
+    description = input("Yangi description (bo'sh qoldirsangiz o'zgarmaydi): ")
+    due_date_text = input("Yangi due date (yyyy-mm-dd | hh:mm) (bo'sh qoldirsangiz o'zgarmaydi): ")
+    due_date = None
+    if due_date_text:
+        due_date = datetime.strptime(due_date_text, "%Y-%m-%d | %H:%M")
+    update_task(get_connection(), task_id, title=title or None, description=description or None, due_date=due_date)
 
 def mark_task():
     task_id = int(input("task id: "))
-
     chenge_task_status(get_connection(), task_id)
 
 def main():
-
     while True:
         print(
-            "------Menu-------\n" \
-            "1. TASK yaratish\n" \
-            "2. TASKlarni ko'rish\n" \
-            "3. TASK yandilash\n" \
-            "4. TASK o'chirish\n" \
-            "5. TASK holatini o'zgartish"
+            "------Menu-------\n"
+            "1. TASK yaratish\n"
+            "2. TASKlarni ko'rish\n"
+            "3. TASK yangilash\n"
+            "4. TASK o'chirish\n"
+            "5. TASK holatini o'zgartirish\n"
+            "0. Chiqish"
         )
-
         choice = input("> ")
-
         if choice == '1':
             add_task()
         elif choice == '2':
@@ -60,9 +57,13 @@ def main():
         elif choice == '4':
             remove_task()
         elif choice == '5':
-            chenge_task_status()
+            mark_task()
+        elif choice == '0':
+            break
         else:
             print("bunday menu yoq")
 
-main()
+if __name__ == "__main__":
+    main()
 
+##

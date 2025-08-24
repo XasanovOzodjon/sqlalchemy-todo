@@ -26,18 +26,28 @@ def create_task(
         conn.close()
 
 def get_tasks(conn: Connection):
-    result = []
     try:
         query = select(tasks)
-
         result = conn.execute(query)
-        conn.commit()
+        rows = result.fetchall()
     except Exception as e:
         print(e)
+        rows = []
     finally:
         conn.close()
+    return rows
 
-    return result
+def get_task_by_id(conn: Connection, task_id: int):
+    try:
+        query = select(tasks).where(tasks.c.id == task_id)
+        result = conn.execute(query)
+        task = result.fetchone()
+    except Exception as e:
+        print(e)
+        task = None
+    finally:
+        conn.close()
+    return task
 
 def delete_task(conn: Connection, task_id: int):
     try:
@@ -101,3 +111,5 @@ def chenge_task_status(conn: Connection, task_id: int,):
     finally:
         conn.close()
 
+
+##
